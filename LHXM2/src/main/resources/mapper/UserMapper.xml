@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhxm.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.lhxm.entity.User">
+    <id column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="handimages" jdbcType="VARCHAR" property="handimages" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="addres" jdbcType="VARCHAR" property="addres" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="certificate" jdbcType="VARCHAR" property="certificate" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="like" jdbcType="INTEGER" property="like" />
+  </resultMap>
+    <select id="fansid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select
+        UIDB
+        from fans
+        WHERE UIDA = #{userid,jdbcType=INTEGER}
+    </select>
+  <select id="gzid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select
+    UIDB
+    from attention
+    WHERE UIDA = #{userid,jdbcType=INTEGER}
+  </select>
+  <sql id="Base_Column_List">
+    userid, username, password, handimages, sex, addres, status, introduce, certificate,
+    code, nicheng
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+    <select id="fanszl" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where userid IN(
+      <foreach collection="list" item="rid"  separator=",">
+        #{rid}
+      </foreach>
+      )
+    </select>
+
+  <select id="selectlike" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select
+    count(*)
+    from fans
+    WHERE UIDA = #{userid,jdbcType=INTEGER}
+  </select>
+  <select id="selectphone" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT username FROM `user` where userid = #{userid,jdbcType=INTEGER}
+  </select>
+  <select id="gzcount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select
+    count(*)
+    from fans
+    WHERE UIDB = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where userid = #{userid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lhxm.entity.User">
+    insert into user (userid, username, password, 
+      handimages, sex, addres, 
+      status, introduce, certificate, 
+      code, like)
+    values (#{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{handimages,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{addres,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}, #{certificate,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{like,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lhxm.entity.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="handimages != null">
+        handimages,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="addres != null">
+        addres,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="certificate != null">
+        certificate,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="like != null">
+        like,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="handimages != null">
+        #{handimages,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="addres != null">
+        #{addres,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null">
+        #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="like != null">
+        #{like,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lhxm.entity.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="handimages != null">
+        handimages = #{handimages,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="addres != null">
+        addres = #{addres,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null">
+        certificate = #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="nicheng != null">
+        nicheng = #{nicheng,jdbcType=VARCHAR},
+      </if>
+      <if test="like != null">
+        like = #{like,jdbcType=INTEGER},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lhxm.entity.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      handimages = #{handimages,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      addres = #{addres,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      certificate = #{certificate,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      like = #{like,jdbcType=INTEGER}
+    where userid = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>

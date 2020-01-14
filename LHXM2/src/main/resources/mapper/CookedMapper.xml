@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhxm.dao.CookedMapper">
+
+    <select id="findByType" resultType="com.lhxm.entity.Cooked">
+        select * from cooked where type = #{type}
+    </select>
+    <select id="findById" resultType="com.lhxm.entity.Cookxcl">
+        select cookxcl.*,food.foodname,food.danwei
+        from cookxcl,food
+        where cookxcl.foods=food.id
+        and
+        cookid=#{cookid}
+
+    </select>
+    <select id="findBuZhouById" resultType="com.lhxm.entity.Cookbz">
+        select * from cookbz where cookid=#{cookid}
+    </select>
+</mapper>

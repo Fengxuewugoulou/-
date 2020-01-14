@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context ">
+
+    <!--1.连接数据库-->
+    <bean id="db" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="password" value="root"/>
+        <property name="username" value="lhxm"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/lhxm"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    </bean>
+    <!--2.扫描注解包-->
+    <context:component-scan base-package="com.lhxm"></context:component-scan>
+    <!--3.创建视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+    <!--4.加载注解驱动-->
+    <mvc:annotation-driven/>
+    <!--5.创建sqlsession工厂-->
+    <bean id="fac" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="db"></property>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+
+    <!--6.扫描dao层接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.lhxm.dao"></property>
+        <property name="sqlSessionFactoryBeanName" value="fac"></property>
+    </bean>
+    <!--7.事务-->
+    <bean id="mytx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="db"></property>
+    </bean>
+    <tx:advice id="myad" transaction-manager="mytx"></tx:advice>
+    <!--8.静态资源-->
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+    <!--文件上传-->
+    <mvc:annotation-driven/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:defaultEncoding="UTF-8"
+          p:maxUploadSize="9999999999"
+    />
+</beans>

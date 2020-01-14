@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<script>
+    function zhuyingone() {
+        $.ajax({
+            url:'app/follow',
+            type:'post',
+            data:{page :1,size:5,id:1,total:null},
+            success: function(data){
+                alert("发现");
+            }
+        })
+    }
+    function zhuyingtwo() {
+        $.ajax({
+            url:'app/follow',
+            type:'post',
+            data:{page :1,size:5,id:1,total:null,ids:1},
+            success: function(data){
+                alert("关注");
+            }
+        })
+    }
+    function zhuyingthree1(){
+        $.ajax({
+            url:'app/addguanzhu',
+            type:'post',
+            data:{uid:2,id:1},
+            success: function(data){
+                if(data==0){
+                    alert("取消关注");
+                }
+                if (data==1){
+                    alert("关注成功");
+                }
+            }
+        })
+    }
+    function zhuyingthree() {
+        $.ajax({
+            url:'app/addlike',
+            type:'post',
+            data:{mid:2,id:3},
+            success: function(data){
+                if(data==0){
+
+                    alert("取消点赞");
+                }
+                if (data==1){
+                    alert("点赞成功");
+                }
+
+            }
+        })
+    }
+    function zhuyingfour() {
+        $.ajax({
+            url:'app/pinglun',
+            type:'post',
+            data:{mid:1,page:1,size:10,total:null},
+            success: function(data){
+                alert("评论调取成功");
+            }
+        })
+    }
+    function zhuyingfive() {
+        $.ajax({
+            url:'app/addpinglun',
+            type:'post',
+            data:{content:"厉害厉害",mid:1,id:1},
+            success: function(data){
+                alert("评论添加成功");
+            }
+        })
+    }
+    function zhuyingsix() {
+        $.ajax({
+            url:'app/follow',
+            type:'post',
+            data:{page :1,size:5,id:1,ids:3,total:null},
+            success: function(data){
+                alert("个人动态列表");
+            }
+        })
+    }
+</script>
+3模块：
+<input type="button" onclick="zhuyingone()" value="发现">
+<input type="button" onclick="zhuyingtwo()" value="关注发现">
+<input type="button" onclick="zhuyingthree()" value="点赞">
+<input type="button" onclick="zhuyingthree1()" value="关注">
+<input type="button" onclick="zhuyingfour()" value="评论">
+<input type="button" onclick="zhuyingfive()" value="添加评论">
+<input type="button" onclick="zhuyingsix()" value="个人动态列表">
+<img src="http://60.205.209.173:8080/tu/timg%20(7).jpg" height="50px">
+</body>
+</html>

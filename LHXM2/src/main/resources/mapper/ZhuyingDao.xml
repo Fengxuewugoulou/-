@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace 表示命名空间，通常定义的格式是接口的完整路径-->
+<mapper namespace="com.lhxm.dao.ZhuyingDao">
+  <select id="find" resultType="com.lhxm.entity.Zhuying1class">
+    SELECT  a.`id` `mid`,a.`show_time`,a.`show_time` show_time1,b.nicheng,b.`handimages` head_img,b.userid uid FROM `moments` a JOIN `user` b ON a.`Uid`=b.`userid`WHERE a.`show_time` <![CDATA[ <= ]]> #{total}
+      <if test="ids==1">
+       AND uid IN(SELECT uidb FROM`attention` WHERE uida=#{id})
+      </if>
+      <if test="ids==2">
+          AND uid =#{id}
+      </if>
+      <if test="ids==3">
+          AND a.id =#{id}
+      </if>
+      ORDER BY a.`show_time` DESC
+  </select>
+
+  <select id="total" resultType="String">
+  SELECT MAX(show_time) FROM `moments`
+  </select>
+  <select id="showimg" resultType="String">
+    SELECT path FROM `mompic` WHERE MID=#{mid}
+  </select>
+  <select id="like_num" resultType="Integer">
+    SELECT COUNT(*) FROM `momlike` WHERE MID=#{mid}
+  </select>
+  <select id="countalike" resultType="Integer">
+ SELECT COUNT(*) FROM `momlike` WHERE `mid`=#{mid} AND `id`=#{id}
+  </select>
+  <select id="comment_num" resultType="Integer">
+ SELECT COUNT(*) FROM `comment` WHERE MID=#{mid}
+  </select>
+  <select id="follow" resultType="Integer">
+    SELECT COUNT(*) FROM `attention` WHERE uida=#{uid} AND uidb=#{mid}
+  </select>
+    <select id="addlike">
+        insert into `momlike` values (#{mid},#{id})
+    </select>
+    <select id="ppalike" >
+        DELETE FROM `momlike` WHERE `MID`=#{mid} AND id=#{id}
+    </select>
+    <select id="pingluns" resultType="String">
+        SELECT MAX(DATE) FROM `comment`
+    </select>
+    <select id="addguanzhu">
+INSERT INTO `attention` VALUES(#{uid},#{mid},NOW())
+    </select>
+    <select id="ppaguanzhu">
+DELETE FROM `attention` WHERE uida=#{uid} AND uidb=#{mid}
+    </select>
+    <select id="total1"  resultType="String">
+        SELECT MAX(DATE) FROM `comment`
+    </select>
+    <select id="pinglun" resultType="com.lhxm.entity.Zhuying2class">
+SELECT b.userid uid,b.handimages avatar,b.nicheng author,a.date datetime,a.date show_time1,a.content FROM `comment` a JOIN `user` b ON a.uid=b.userid WHERE `mid`=#{mid} AND a.date <![CDATA[ <= ]]> #{total} ORDER BY a.date DESC
+    </select>
+    <select id="addpinglun">
+        INSERT INTO `comment` VALUES(NULL,#{mid},#{content},NOW(),#{id})
+    </select>
+    <select id="addqiandao">
+        INSERT INTO `qiandao` VALUES(#{riqi},#{fan},#{id})
+    </select>
+    <select id="cqiandao" resultType="Integer">
+        SELECT count(*) from `qiandao` where riqi = #{riqi} AND fan=#{fan} AND userid=#{id}
+    </select>
+</mapper>

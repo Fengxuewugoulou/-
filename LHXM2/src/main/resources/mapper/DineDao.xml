@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace 表示命名空间，通常定义的格式是接口的完整路径-->
+<mapper namespace="com.lhxm.dao.DineDao">
+
+    <insert id="addWeight">
+        INSERT INTO weight VALUES (NULL,#{weight},now(),#{userid})
+    </insert>
+
+    <select id="findDine" resultType="com.lhxm.entity.Dine">
+        SELECT * FROM dine WHERE `date`=#{date} and userid=#{userid}
+    </select>
+
+    <select id="findByName" resultType="com.lhxm.entity.ZBFood">
+        SELECT * FROM food WHERE foodname=#{foodname}
+    </select>
+
+    <select id="findFoodByName" resultType="com.lhxm.entity.ZBFood">
+        SELECT foodname,calorie FROM food WHERE foodname LIKE '%${name}%'
+    </select>
+
+    <select id="findFood" resultType="com.lhxm.entity.ZBFood">
+        SELECT foodname,calorie FROM food WHERE fenlei=#{row}
+    </select>
+
+    <insert id="addUserFood">
+        INSERT INTO dine VALUES (#{tcid},#{date},#{dine},#{foodname},#{foodnum},#{userid})
+    </insert>
+
+    <insert id="addDynamic" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO moments VALUES (NULL,'${content}',#{showTime},share,#{uid})
+    </insert>
+
+    <insert id="addMompic">
+        INSERT INTO mompic VALUES (#{mid},#{path})
+    </insert>
+</mapper>
